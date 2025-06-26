@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import com.siteprofessor.backend.model.Usuario;
 import com.siteprofessor.backend.repository.UsuarioRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository repository;
+
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) {
@@ -26,6 +27,6 @@ public class UsuarioService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
 
         return new User(usuario.getEmail(), usuario.getSenha(),
-                List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil().toUpperCase())));
+                List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getPerfil().name().toUpperCase())));
     }
 }

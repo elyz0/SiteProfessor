@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service;
 import com.siteprofessor.backend.model.Hobby;
 import com.siteprofessor.backend.repository.HobbyRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class HobbyService {
 
     private final HobbyRepository repository;
+
+    public HobbyService(HobbyRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Hobby> listar() {
         return repository.findAll();

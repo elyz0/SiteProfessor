@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service;
 import com.siteprofessor.backend.model.AreaPesquisa;
 import com.siteprofessor.backend.repository.AreaPesquisaRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class AreaPesquisaService {
 
     private final AreaPesquisaRepository repository;
+
+    public AreaPesquisaService(AreaPesquisaRepository repository) {
+        this.repository = repository;
+    }
 
     public List<AreaPesquisa> listar() {
         return repository.findAll();
@@ -24,8 +25,13 @@ public class AreaPesquisaService {
     }
 
     public AreaPesquisa atualizar(Long id, AreaPesquisa dados) {
-        dados.setId(id);
-        return repository.save(dados);
+        AreaPesquisa existente = repository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Área de pesquisa não encontrada")); 
+         
+        existente.setNome(dados.getNome());
+        existente.setDescricao(dados.getDescricao()); 
+
+        return repository.save(existente);
     }
 
     public void deletar(Long id) {

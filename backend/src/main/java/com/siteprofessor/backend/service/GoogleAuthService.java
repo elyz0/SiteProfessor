@@ -3,20 +3,24 @@ package com.siteprofessor.backend.service;
 import com.google.api.client.googleapis.auth.oauth2.*;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.siteprofessor.backend.model.Usuario;
+import com.siteprofessor.backend.model.UsuarioBuilder;
 import com.siteprofessor.backend.repository.UsuarioRepository;
 import com.siteprofessor.backend.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service; 
 import com.google.api.client.json.jackson2.JacksonFactory; 
-
+import com.siteprofessor.backend.model.Perfil;
 import java.util.Collections;
 
 @Service
-@RequiredArgsConstructor
 public class GoogleAuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtil;
+
+    public GoogleAuthService(JwtUtil jwtUtil, UsuarioRepository usuarioRepository) {
+        this.jwtUtil = jwtUtil;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     public String autenticarViaGoogle(String idTokenString) {
         try {
@@ -40,13 +44,13 @@ public class GoogleAuthService {
 
             Usuario usuario = usuarioRepository.findByGoogleId(googleId)
                     .orElseGet(() -> {
-                        // Primeiro acesso: cria novo visualizador
-                        Usuario novo = Usuario.builder()
-                                .email(email)
-                                .nome(nome)
-                                .perfil("VISUALIZADOR")
-                                .googleId(googleId)
-                                .build();
+                        //em um primeiro acesso vai criar novo visualizador
+                        Usuario novo = new UsuarioBuilder()
+                                .comEmail(email)
+                                .comNome(nome)
+                                .comPerfil(Perfil.VISUALIZADOR)
+                                .comGoogleId(googleId)
+                                .construir();
                         return usuarioRepository.save(novo);
                     });
 

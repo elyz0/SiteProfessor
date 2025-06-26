@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service;
 import com.siteprofessor.backend.model.Publicacao;
 import com.siteprofessor.backend.repository.PublicacaoRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class PublicacaoService {
 
     private final PublicacaoRepository repository;
+
+    public PublicacaoService(PublicacaoRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Publicacao> listar() {
         return repository.findAll();

@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 import com.siteprofessor.backend.model.Projeto;
 import com.siteprofessor.backend.repository.ProjetoRepository;
 
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+
 public class ProjetoService {
 
     private final ProjetoRepository repository;
+
+    public ProjetoService(ProjetoRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Projeto> listar() {
         return repository.findAll();
@@ -28,8 +31,15 @@ public class ProjetoService {
     }
 
     public Projeto atualizar(Long id, Projeto dados) {
-        Projeto existente = buscarPorId(id);
-        dados.setId(existente.getId());
+        Projeto existente = buscarPorId(id); 
+
+        existente.setTitulo(dados.getTitulo());
+        existente.setObjetivo(dados.getObjetivo());
+        existente.setIdealizadores(dados.getIdealizadores());
+        existente.setLocalCriacao(dados.getLocalCriacao());
+        existente.setDetalhes(dados.getDetalhes());
+        existente.setImagem(dados.getImagem()); 
+
         return repository.save(dados);
     }
 
