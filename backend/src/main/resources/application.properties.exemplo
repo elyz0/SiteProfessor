@@ -1,0 +1,4 @@
+# application.properties.example 
+
+app.jwt.secret=SUBSTITUA_POR_UMA_CHAVE_SEGURA
+spring.datasource.password=SUA_SENHA_DO_BANCO

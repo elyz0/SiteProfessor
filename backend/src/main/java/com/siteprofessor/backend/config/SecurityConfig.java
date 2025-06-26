@@ -13,13 +13,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.siteprofessor.backend.security.JwtFilter;
 
-import lombok.RequiredArgsConstructor;
+
 
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
